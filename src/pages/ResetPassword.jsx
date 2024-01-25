@@ -1,14 +1,9 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useEffect } from "react";
 import { Button, Container, Form, Image } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import styled from "styled-components";
 import * as yup from "yup";
 import subastaPandaLogo from "../assets/subastapanda.png";
-import { authSelector, loginUser, reset } from "../features/auth/authSlice";
 
 const StyledContainer = styled(Container)`
   display: flex;
@@ -52,88 +47,71 @@ const StyledButton = styled(Button)`
   height: 60px;
   letter-spacing: 2px;
   border-radius: 12px;
-  margin-top: 20px;
 `;
 const StyledForm = styled(Form)`
+  margin-top: 40px;
   cursor: pointer;
-  margin-top: 10px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   gap: 10px;
 `;
 
-const StyledLink = styled(Link)`
+const StyledParagraph = styled.p`
   text-decoration: none;
   text-align: center;
   color: black;
   letter-spacing: 2px;
-  margin-top: 15px;
   font-size: 11pt;
   font-weight: 700;
-  &:hover {
-    text-decoration: underline;
-  }
-`;
-const StyledForgotPassword = styled(Link)`
-  text-decoration: none;
-  text-align: end;
-  color: black;
-  letter-spacing: 1px;
-  font-weight: 400;
-
-  &:hover {
-    text-decoration: underline;
-  }
+  margin-top: 60px;
 `;
 const StyledInput = styled(Form.Control)`
+  margin-top: 30px;
   cursor: pointer;
-
   height: 60px;
   letter-spacing: 2px;
   border-radius: 12px;
 `;
 
-const loginSchema = yup
+const resetSchema = yup
   .object({
-    user_name: yup.string().required(),
-    password: yup.string().required(),
+    password: yup
+      .string()
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+        "Must at least one uppercase letter, one lowercase letter, one symbol, one digit, and be at least 8 characters long"
+      )
+      .required(),
+    confirm_password: yup
+      .string()
+      .required("Please fill in this field")
+      .oneOf([yup.ref("password"), null], "Password did'nt match"),
   })
   .required();
 
-const Login = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { isFetching, isSuccess, isError, errorMessage } =
-    useSelector(authSelector);
+const ResetPasswordPage = () => {
+  // const dispatch = useDispatch();
+  // const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(loginSchema),
+    resolver: yupResolver(resetSchema),
   });
 
-  const onSubmit = ({ user_name, password }) => {
-    dispatch(loginUser({ user_name, password }));
+  const onSubmit = (data) => {
+    // let userCredenials = {
+    //   username,
+    //   password,
+    // };
+    // dispatch(loginUser(userCredenials)).then((result) => {
+    //   if (result.payload) {
+    //     navigate("/");
+    //   }
+    // });
   };
-  useEffect(() => {
-    return () => {
-      dispatch(reset());
-    };
-  }, []);
 
-  useEffect(() => {
-    if (isSuccess) {
-      dispatch(reset());
-      navigate("/");
-    }
-
-    if (isError) {
-      toast.error(errorMessage);
-      dispatch(reset());
-    }
-  }, [isSuccess, isError]);
   return (
     <StyledContainer>
       <StyledContentContainer>
@@ -149,40 +127,32 @@ const Login = () => {
       </StyledContentContainer>
       <StyledFormContainer>
         <StyledForm onSubmit={handleSubmit(onSubmit)}>
-          <h2>Login</h2>
+          <h5>New Password</h5>
           <Form.Group>
             <StyledInput
-              type="name"
-              {...register("user_name")}
-              placeholder="Full Name"
-              isInvalid={!!errors.user_name}
+              type="password"
+              {...register("confirm_password")}
+              placeholder="Confirm password"
             />
-            <Form.Control.Feedback type="invalid">
-              {errors.user_name && errors.user_name.message}
-            </Form.Control.Feedback>
+            {errors.confirm_password && (
+              <p>{errors.confirm_password.message}</p>
+            )}
           </Form.Group>
           <Form.Group>
             <StyledInput
               type="password"
               {...register("password")}
-              placeholder="Password"
-              isInvalid={!!errors.password}
+              placeholder="Enter New password"
             />
-            <Form.Control.Feedback type="invalid">
-              {errors.password && errors.password.message}
-            </Form.Control.Feedback>
+            {errors.password && <p>{errors.password.message}</p>}
           </Form.Group>
-          <StyledForgotPassword to="/forgot-password">
-            Forgot Password
-          </StyledForgotPassword>
           <StyledButton type="submit" variant="dark">
-            Login |
+            Submit
           </StyledButton>
-          <StyledLink to="/signup">Don't have an account</StyledLink>
         </StyledForm>
       </StyledFormContainer>
     </StyledContainer>
   );
 };
 
-export default Login;
+export default ResetPasswordPage;

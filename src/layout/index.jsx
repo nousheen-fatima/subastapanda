@@ -5,20 +5,13 @@ import AppNavbar from "./Navbar";
 
 import styled from "styled-components";
 
-const Containz = styled.div`
+const Container = styled.div`
   display: flex;
   flex-direction: column;
-  background: red;
+  max-width: 100%;
 `;
-
-const DIVN = styled.div`
-  padding-top: 5rem;
-`;
-
 const DIVM = styled.div`
-  padding: 3rem 0rem;
   min-height: 60vh;
-  position: relative;
 `;
 const DIVF = styled.div`
   margin-top: auto;
@@ -26,17 +19,15 @@ const DIVF = styled.div`
 
 const Layout = () => {
   return (
-    <Containz>
-      <DIVN>
-        <AppNavbar />
-      </DIVN>
+    <Container>
+      <AppNavbar />
       <DIVM>
         <Outlet />
       </DIVM>
       <DIVF>
         <Footer />
       </DIVF>
-    </Containz>
+    </Container>
   );
 };
 
