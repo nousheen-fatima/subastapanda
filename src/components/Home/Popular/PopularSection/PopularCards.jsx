@@ -1,5 +1,6 @@
 import React from "react";
-import { Card, Container } from "react-bootstrap";
+import { Card, Container, Image } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const StyledContainer = styled(Container)`
@@ -15,7 +16,7 @@ const StyledCard = styled(Card)`
   margin-bottom: 20px;
 `;
 
-const Image = styled(Card.Img)`
+const StyledImage = styled(Image)`
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -37,11 +38,12 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
 `;
-const PopularCards = ({ title, image_url, product_count }) => {
+const PopularCards = ({ title, image_url, product_count, category_id }) => {
+  const navigate = useNavigate();
   return (
     <StyledContainer>
-      <StyledCard>
-        <Image src={image_url} alt="image_url" />
+      <StyledCard onClick={() => navigate("/products?category=" + title)}>
+        <StyledImage src={image_url} alt="image not found" />
       </StyledCard>
       <Wrapper>
         <Title>{title}</Title>

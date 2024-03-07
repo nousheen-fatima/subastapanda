@@ -3,11 +3,19 @@ import { Button, Image } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
+import { BsCartFill } from "react-icons/bs";
+import { GoBell } from "react-icons/go";
+import { IoWalletSharp } from "react-icons/io5";
+import { LuLogOut } from "react-icons/lu";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import subastaPandaLogo from "../assets/subastapanda.png";
+import WalletCard from "../components/Wallet/WalletCard";
+import { logout } from "../features/auth/authSlice";
 
 const StyledNavbar = styled(Navbar)`
+  height: 8vh;
   border: 1px solid black;
   display: flex;
   flex-direction: column;
@@ -20,22 +28,32 @@ const StyledButton = styled(Button)`
   padding: 10px;
   width: 70px;
 `;
+const StyledNav = styled(Nav)`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+`;
 
 function getUser() {
   let user = localStorage.getItem("user");
   if (user) {
-    user = JSON.parse(user);
+    return JSON.parse(user);
   } else {
     user = null;
   }
-  return null;
 }
 
 export default function App() {
-  const { user, setUser } = useState(getUser());
+  const [user, setUser] = useState(getUser());
+  const [showWallet, setShowWallet] = useState(false);
+  const dispatch = useDispatch();
   const handleLogout = () => {
-    localStorage.removeItem("user");
+    dispatch(logout());
     setUser(null);
+  };
+  const toggleWallet = () => {
+    setShowWallet(!showWallet);
   };
   return (
     <div>
@@ -53,7 +71,7 @@ export default function App() {
 
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="ml-auto">
+            <StyledNav className="ml-auto">
               <Nav.Link as={Link} to="/category" className="nav-link">
                 All categories
               </Nav.Link>
@@ -63,34 +81,60 @@ export default function App() {
               <Nav.Link as={Link} to="/contact" className="nav-link">
                 Contact us
               </Nav.Link>
-            </Nav>
+            </StyledNav>
           </Navbar.Collapse>
-          <Nav className="ml-auto">
-            <StyledButton variant="dark" style={{ marginRight: "10px" }}>
+          <StyledNav className="ml-auto">
+            <StyledButton
+              variant="dark"
+              style={{ marginRight: "10px" }}
+              onClick={toggleWallet}
+            >
               Sell
             </StyledButton>
             {user ? (
               <>
-                <h4>
-                  Hello,{user.firstName} {user.lastName}
-                </h4>
-                <h5>{user.email}</h5>
-                <Button variant="danger" onClick={handleLogout}>
-                  Logout
-                </Button>
+                <Nav.Link>
+                  <BsCartFill size={25} />
+                </Nav.Link>
+                <Nav.Link>
+                  <IoWalletSharp size={25} onClick={toggleWallet} />
+                </Nav.Link>
+                <Nav.Link>
+                  <GoBell size={25} />
+                </Nav.Link>
+
+                <Image
+                  src="https://imgv3.fotor.com/images/slider-image/A-clear-image-of-a-woman-wearing-red-sharpened-by-Fotors-image-sharpener.jpg"
+                  style={{ width: "30px", height: "30px", objectFit: "cover" }}
+                  rounded
+                />
+
+                <Nav.Link>
+                  <LuLogOut size={25} onClick={handleLogout} />
+                </Nav.Link>
               </>
             ) : (
-              <Nav.Link as={Link} to="/login" style={{ marginRight: "10px" }}>
-                Login |
-              </Nav.Link>
+              <Nav>
+                <Nav.Link as={Link} to="/login" style={{ marginRight: "10px" }}>
+                  Login |
+                </Nav.Link>
+                <Nav.Link
+                  as={Link}
+                  to="/signup"
+                  style={{ marginLeft: "-20px" }}
+                >
+                  Signup
+                </Nav.Link>
+              </Nav>
             )}
-
-            <Nav.Link as={Link} to="/signup" style={{ marginLeft: "-20px" }}>
-              Signup
-            </Nav.Link>
-          </Nav>
+          </StyledNav>
         </Container>
       </StyledNavbar>
+      {showWallet && (
+        <>
+          <WalletCard show={showWallet} setShow={setShowWallet} />
+        </>
+      )}
     </div>
   );
 }

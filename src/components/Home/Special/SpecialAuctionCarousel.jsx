@@ -4,7 +4,6 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import styled from "styled-components";
 import SpecialAuctionItems from "./SpecialAuctionItems";
-import { Data } from "./data";
 
 const StyledCarousel = styled(Carousel)`
   .react-multi-carousel-item {
@@ -12,7 +11,7 @@ const StyledCarousel = styled(Carousel)`
   }
 `;
 
-const SpecialAuctionCarousel = () => {
+const SpecialAuctionCarousel = ({ products }) => {
   const responsive = {
     desktop: { breakpoint: { max: 3000, min: 1024 }, items: 3 },
     tablet: { breakpoint: { max: 1024, min: 464 }, items: 3 },
@@ -41,12 +40,13 @@ const SpecialAuctionCarousel = () => {
         showDots={false}
         arrows={false}
       >
-        {Data.map((category) => (
+        {products.map((product) => (
           <SpecialAuctionItems
-            key={category.id}
-            title={category.title}
-            image_url={category.image_url}
-            count={category.count}
+            key={product.id}
+            title={product.title}
+            image_url={product.main_image_url}
+            price={product.start_price}
+            product_Id={product.id}
           />
         ))}
       </StyledCarousel>

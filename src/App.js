@@ -1,3 +1,4 @@
+import { Toaster } from "react-hot-toast";
 import styled from "styled-components";
 import AppRouter from "./routes";
 
@@ -11,6 +12,7 @@ const Container = styled.div`
 function App() {
   return (
     <Container>
+      <Toaster position="top-center" />
       <AppRouter />
     </Container>
   );

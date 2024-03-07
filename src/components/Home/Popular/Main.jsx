@@ -13,9 +13,10 @@ const Wrapper = styled(Container)`
   padding-top: 80px;
 `;
 
-const Heading = styled.h6`
+const Heading = styled.h2`
   color: black;
   font-size: 55px;
+  font-weight: bold;
   text-align: center;
 
   @media (max-width: 768px) {
@@ -36,7 +37,9 @@ const Main = () => {
       <Row className="justify-content-center">
         <Col xs={12} md={8}>
           <Heading>
-            Making Buying and Selling Hassle-free, With our Trusted Sellers that
+            <span>Make Buy & Sell Hassle-free,With</span>
+            <span> our Trusted Sellers that </span>
+            <br />
             you rate and review.
           </Heading>
           <StyledButton variant="dark" className="btn-lg btn-block">

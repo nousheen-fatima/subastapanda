@@ -1,10 +1,12 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, Container, Form, Image } from "react-bootstrap";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import * as yup from "yup";
 import subastaPandaLogo from "../assets/subastapanda.png";
+import { forgotPassword } from "../features/auth/authSlice";
 
 const StyledContainer = styled(Container)`
   display: flex;
@@ -81,7 +83,7 @@ const forgotPasswordSchema = yup
   .required();
 
 const ForgotpasswordPage = () => {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   // const navigate = useNavigate();
   const {
     register,
@@ -90,17 +92,11 @@ const ForgotpasswordPage = () => {
   } = useForm({
     resolver: yupResolver(forgotPasswordSchema),
   });
+  // const { isLoading, isSuccess, isError, errorMessage } =
+  //   useSelector(authSelector);
 
-  const onSubmit = (data) => {
-    // let userCredenials = {
-    //   username,
-    //   password,
-    // };
-    // dispatch(loginUser(userCredenials)).then((result) => {
-    //   if (result.payload) {
-    //     navigate("/");
-    //   }
-    // });
+  const onSubmit = ({ email }) => {
+    dispatch(forgotPassword({ email }));
   };
 
   return (

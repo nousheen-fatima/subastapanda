@@ -1,15 +1,15 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useEffect } from "react";
-import { Button, Container, Form, Image } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Button, Container, Form, Image, InputGroup } from "react-bootstrap";
 import { useForm } from "react-hook-form";
+import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import styled from "styled-components";
 import * as yup from "yup";
 import subastaPandaLogo from "../assets/subastapanda.png";
-import { reset, signupUser } from "../features/auth/authSlice";
-
+import { authSelector, reset, signupUser } from "../features/auth/authSlice";
 const StyledContainer = styled(Container)`
   display: flex;
   align-items: center;
@@ -77,15 +77,26 @@ const StyledLink = styled(Link)`
 
 const StyledInput = styled(Form.Control)`
   cursor: pointer;
-
   height: 60px;
   letter-spacing: 2px;
   border-radius: 12px;
 `;
 
+const StyledInputGroup = styled(InputGroup)`
+  position: relative;
+`;
+
+const EyeIcon = styled.span`
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+`;
+
 const signupSchema = yup
   .object({
-    fullname: yup.string().required(),
+    full_name: yup.string().required(),
     email: yup.string().email("Invalid email").required("Required"),
     password: yup
       .string()
@@ -103,6 +114,7 @@ const signupSchema = yup
   .required();
 
 const Signup = () => {
+  const [showPassword, setShowPassword] = useState(false);
   const {
     register,
     handleSubmit,
@@ -113,10 +125,11 @@ const Signup = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { isSuccess, isError, errorMessage } = useSelector();
+  const { isLoading, isSuccess, isError, errorMessage } =
+    useSelector(authSelector);
 
-  const onSubmit = (data) => {
-    dispatch(signupUser(data));
+  const onSubmit = ({ full_name, email, password }) => {
+    dispatch(signupUser({ full_name, email, password }));
   };
 
   useEffect(() => {
@@ -128,7 +141,7 @@ const Signup = () => {
   useEffect(() => {
     if (isSuccess) {
       dispatch(reset());
-      navigate("/");
+      navigate("/login");
     }
 
     if (isError) {
@@ -155,13 +168,13 @@ const Signup = () => {
           <h2>Signup</h2>
           <Form.Group>
             <StyledInput
-              type="fullname"
-              {...register("fullname")}
+              type="name"
+              {...register("full_name")}
               placeholder="Full Name"
-              isInvalid={!!errors.fullname}
+              isInvalid={!!errors.full_name}
             />
             <Form.Control.Feedback type="invalid">
-              {errors.fullname && errors.fullname.message}
+              {errors.full_name && errors.full_name.message}
             </Form.Control.Feedback>
           </Form.Group>
           <Form.Group>
@@ -176,15 +189,27 @@ const Signup = () => {
             </Form.Control.Feedback>
           </Form.Group>
           <Form.Group>
-            <StyledInput
-              type="password"
-              {...register("password")}
-              placeholder="Password"
-              isInvalid={!!errors.password}
-            />
-            <Form.Control.Feedback type="invalid">
-              {errors.password && errors.password.message}
-            </Form.Control.Feedback>
+            <StyledInputGroup>
+              <StyledInput
+                type={showPassword ? "text" : "password"}
+                {...register("password")}
+                placeholder="Password"
+                isInvalid={!!errors.password}
+              />
+              <EyeIcon
+                onClick={() => setShowPassword(!showPassword)}
+                aria-hidden="true"
+              >
+                {showPassword ? (
+                  <AiFillEyeInvisible size={30} />
+                ) : (
+                  <AiFillEye size={30} />
+                )}
+              </EyeIcon>
+              <Form.Control.Feedback type="invalid">
+                {errors.password && errors.password.message}
+              </Form.Control.Feedback>
+            </StyledInputGroup>
           </Form.Group>
           <Form.Group>
             <StyledInput

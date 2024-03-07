@@ -2,9 +2,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect } from "react";
 import { Button, Container, Form, Image } from "react-bootstrap";
 import { useForm } from "react-hook-form";
+import { toast } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import styled from "styled-components";
 import * as yup from "yup";
 import subastaPandaLogo from "../assets/subastapanda.png";
@@ -104,8 +104,7 @@ const loginSchema = yup
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isFetching, isSuccess, isError, errorMessage } =
-    useSelector(authSelector);
+  const { isSuccess, isError, errorMessage } = useSelector(authSelector);
   const {
     register,
     handleSubmit,
@@ -114,26 +113,31 @@ const Login = () => {
     resolver: yupResolver(loginSchema),
   });
 
-  const onSubmit = ({ user_name, password }) => {
+  const onSubmit = async ({ user_name, password }) => {
+    try {
+      dispatch(loginUser({ user_name, password }));
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  const handleLogin = ({ user_name, password }) => {
     dispatch(loginUser({ user_name, password }));
   };
-  useEffect(() => {
-    return () => {
-      dispatch(reset());
-    };
-  }, []);
 
   useEffect(() => {
     if (isSuccess) {
-      dispatch(reset());
       navigate("/");
+      dispatch(reset());
+      toast.success("Logged In Successfully!");
     }
 
     if (isError) {
-      toast.error(errorMessage);
       dispatch(reset());
+      toast.error(errorMessage || "Error Logging In.");
     }
-  }, [isSuccess, isError]);
+  }, [isSuccess, isError, errorMessage, dispatch, navigate]);
+
   return (
     <StyledContainer>
       <StyledContentContainer>
@@ -148,7 +152,7 @@ const Login = () => {
         </StyledText>
       </StyledContentContainer>
       <StyledFormContainer>
-        <StyledForm onSubmit={handleSubmit(onSubmit)}>
+        <StyledForm onSubmit={handleSubmit(handleLogin)}>
           <h2>Login</h2>
           <Form.Group>
             <StyledInput
@@ -176,7 +180,7 @@ const Login = () => {
             Forgot Password
           </StyledForgotPassword>
           <StyledButton type="submit" variant="dark">
-            Login |
+            Login
           </StyledButton>
           <StyledLink to="/signup">Don't have an account</StyledLink>
         </StyledForm>

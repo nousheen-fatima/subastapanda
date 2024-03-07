@@ -65,6 +65,7 @@ const PopularListSlider = () => {
             title={category.title}
             image_url={category.image}
             product_count={category.products_count}
+            category_id={category.id}
           />
         ))}
     </StyledCarousel>

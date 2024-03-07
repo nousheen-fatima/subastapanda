@@ -1,9 +1,9 @@
 import React from "react";
-import Categories from "../components/Categories";
+import GetCategories from "../components/Categories";
 const Category = () => {
   return (
     <div>
-      <Categories />
+      <GetCategories />
     </div>
   );
 };

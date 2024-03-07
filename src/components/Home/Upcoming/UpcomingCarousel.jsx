@@ -41,12 +41,12 @@ const UpcomingCarousel = () => {
         showDots={false}
         arrows={false}
       >
-        {Data.map((category) => (
+        {Data.map((product) => (
           <UpcomingAuctionItems
-            key={category.id}
-            title={category.title}
-            image_url={category.image_url}
-            count={category.count}
+            key={product.id}
+            title={product.title}
+            image_url={product.image_url}
+            price={product.price}
           />
         ))}
       </StyledCarousel>

@@ -1,17 +1,17 @@
 import { faApple } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
-import { Button, Container } from "react-bootstrap";
+import { Button, Container, Image } from "react-bootstrap";
 import styled from "styled-components";
 
 const MainWrapper = styled.div`
   width: 100%;
-  min-height: 60vh;
-  background-color: #f0f1f5;
+  min-height: 50vh;
+  background-color: #ebebeb;
   display: flex;
   justify-content: space-between;
   align-items: center;
-
+  margin-bottom: 40px;
   @media (max-width: 768px) {
     flex-direction: column;
     text-align: center;
@@ -40,17 +40,23 @@ const TextWrapper = styled.div`
 `;
 
 const Heading = styled.h1`
-  font-size: 3rem;
-  letter-spacing: 4px;
+  font-size: 2.8rem;
+  letter-spacing: 6px;
+  font-weight: 900;
 `;
 
 const Paragraph = styled.p`
-  font-size: 1.3rem;
-  letter-spacing: 4px;
+  font-size: 1rem;
+  letter-spacing: 2px;
+  margin-top: 20px;
+`;
+const Para = styled.p`
+  font-size: 1.9rem;
+  letter-spacing: 2px;
   margin-top: 20px;
 `;
 
-const RoundedImage = styled.img`
+const RoundedImage = styled(Image)`
   border-radius: 50%;
   width: 400px;
   height: 400px;
@@ -104,13 +110,13 @@ const MobileView = () => {
               <br />
               <span>Selling HASSLE FREE</span>
             </Heading>
-            <Paragraph>
-              <span>Buy, Sell And Find Just About Anything Using</span>
+            <Para>
+              <span>Buy, Sell And Find Just About Anything</span>
               <br />
-              <span>The App On Your Mobile</span>
-            </Paragraph>
+              <span> Using The App On Your Mobile</span>
+            </Para>
             <Wrapper>
-              <Paragraph>Get Your App Today</Paragraph>
+              <Paragraph>GET YOUR APP TODAY</Paragraph>
               <StyledButton variant="outline-dark" className="btn-icon-text">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

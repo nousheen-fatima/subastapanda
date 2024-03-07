@@ -1,9 +1,10 @@
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
-import { Button, Col, Container, Row } from "react-bootstrap";
+import { Button, Container, Row } from "react-bootstrap";
 import { LuAlarmClock } from "react-icons/lu";
 import styled from "styled-components";
+import BidInput from "../../Ui/PlaceBid";
 
 const MainWrapper = styled.div`
   width: 100%;
@@ -90,9 +91,8 @@ const RowWrapper = styled.div`
 
 const RightWrapper = styled.div`
   display: flex;
-  flex-direction: row;
   justify-content: flex-end;
-  gap: 28px;
+  gap: 20px;
   align-items: center;
 `;
 
@@ -113,22 +113,6 @@ const RightParagraph = styled.p`
   color: #333;
   display: flex;
   gap: 8px;
-`;
-const LinearButton = styled(Row)`
-  position: relative;
-  border-radius: 10px;
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #fff;
-    z-index: -1;
-    border-radius: 10px;
-  }
 `;
 
 const AuctionContainer = () => {
@@ -153,12 +137,7 @@ const AuctionContainer = () => {
               <Count>$2200</Count>
             </Row>
             <RightWrapper>
-              <LinearButton>
-                <Col>
-                  <ButtonStyled variant="dark">$</ButtonStyled>
-                  <ButtonStyled variant="outline-dark">210</ButtonStyled>
-                </Col>
-              </LinearButton>
+              <BidInput />
               <ButtonStyled variant="dark">Enter Bid</ButtonStyled>
             </RightWrapper>
             <RightParagraph>

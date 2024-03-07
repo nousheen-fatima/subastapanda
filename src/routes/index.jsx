@@ -9,6 +9,7 @@ import Login from "../pages/Login";
 import PageNotFound from "../pages/PageNotFound";
 import Products from "../pages/Product";
 import Signup from "../pages/Signup";
+import SingleProduct from "../pages/SingleProduct";
 
 const AppRouter = () => {
   return (
@@ -18,6 +19,7 @@ const AppRouter = () => {
           <Route exact path="/" element={<Home />} />
           <Route path="/category" element={<Category />} />
           <Route path="/products" element={<Products />} />
+          <Route path="/products/:id" element={<SingleProduct />}></Route>
           <Route path="/about" element={<AboutUs />} />
           <Route path="/contact" element={<ContactUs />} />
           <Route path="*" element={<PageNotFound />} />
