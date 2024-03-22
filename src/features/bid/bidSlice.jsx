@@ -23,8 +23,16 @@ export const placeBid = createAsyncThunk(
     }
   }
 );
+export const fetchLastChanceBidData = createAsyncThunk(
+  "bid/fetchLastChanceBidData",
+  async () => {
+    const { data } = await axios.get(`{{BASE_URL}}/products`);
+    return data.data;
+  }
+);
 
 const initialState = {
+  lastChanceBidData: [],
   loading: false,
   error: null,
 };
@@ -34,17 +42,30 @@ const bidSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(placeBid.pending, (state) => {
-      state.loading = true;
-      state.error = null;
-    });
-    builder.addCase(placeBid.fulfilled, (state, action) => {
-      state.loading = false;
-    });
-    builder.addCase(placeBid.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.error.message;
-    });
+    builder
+      .addCase(placeBid.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(placeBid.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(placeBid.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(fetchLastChanceBidData.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchLastChanceBidData.fulfilled, (state, action) => {
+        state.loading = false;
+        state.lastChanceBidData = action.payload;
+      })
+      .addCase(fetchLastChanceBidData.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      });
   },
 });
 

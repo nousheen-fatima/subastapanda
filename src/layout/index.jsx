@@ -8,19 +8,25 @@ import styled from "styled-components";
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  max-width: 100%;
+  width: 100%;
 `;
-const DIVM = styled.div`
+const DIVM = styled(Container)`
   min-height: 60vh;
 `;
-const DIVF = styled.div`
+const DIVF = styled(Container)`
   margin-top: auto;
+`;
+const DIVH = styled(Container)`
+  width: 100%;
 `;
 
 const Layout = () => {
   return (
     <Container>
-      <AppNavbar />
+      <DIVH>
+        <AppNavbar />
+      </DIVH>
+
       <DIVM>
         <Outlet />
       </DIVM>

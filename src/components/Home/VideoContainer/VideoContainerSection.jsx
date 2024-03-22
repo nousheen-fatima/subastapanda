@@ -16,10 +16,13 @@ const MainWrapper = styled.div`
   align-items: center;
   gap: 30px;
   margin-top: 20px;
+  padding: 20px;
 
   @media (max-width: 768px) {
     flex-direction: column;
+    justify-content: center;
     text-align: center;
+    padding: 10px;
   }
 `;
 const LeftItems = styled.div`
@@ -41,30 +44,15 @@ const Paragraph = styled.p`
 
 const VideoWrapper = styled.div`
   position: relative;
+  width: 100%;
   padding-bottom: 56.25%;
   height: 0;
 `;
 
-// const VideoIframe = styled.iframe`
-//   position: absolute;
-//   top: 0;
-//   left: 0;
-//   width: 100%;
-//   height: 100%;
-// `;
 const StyledButton = styled(Button)`
   width: 120px;
+  align-self: center;
 `;
-// const videoJsOptions = {
-//   autoplay: true,
-//   controls: true,
-//   sources: [
-//     {
-//       src: "/path/to/video.mp4",
-//       type: "video/mp4",
-//     },
-//   ],
-// };
 
 const VideoContainerSection = () => {
   return (

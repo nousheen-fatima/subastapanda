@@ -2,13 +2,31 @@ import React, { useEffect, useMemo } from "react";
 import { Container } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
+import styled from "styled-components";
 import {
   fetchProductsByCategory,
   getAllProducts,
 } from "../../features/products/productsSlice";
-import RecommendedItems from "../Home/FreshRecommended/Fresh/RecommendedItems";
+import ProductCard from "./ProductCard";
 
-const ProductsList = ({ sortOption }) => {
+const StyledContainer = styled(Container)`
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
+`;
+const NoProductsParagraph = styled.p`
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+  grid-column: span 3;
+`;
+
+const ProductsList = ({ sortOption, next }) => {
   const { products } = useSelector((state) => state.products);
   const dispatch = useDispatch();
   const url = useLocation();
@@ -46,22 +64,23 @@ const ProductsList = ({ sortOption }) => {
   }, [sortOption, products]);
 
   return (
-    <Container
-      style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
-      }}
-    >
-      {sortedProducts.map((product) => (
-        <RecommendedItems
-          key={product.id}
-          title={product.title}
-          image_url={product.main_image_url}
-          price={product.start_price}
-          product_Id={product.id}
-        />
-      ))}
-    </Container>
+    <StyledContainer>
+      {sortedProducts.length === 0 ? (
+        <NoProductsParagraph>There are no products to show</NoProductsParagraph>
+      ) : (
+        sortedProducts
+          .slice(0, next)
+          ?.map((product) => (
+            <ProductCard
+              key={product.id}
+              title={product.title}
+              image_url={product.main_image_url}
+              price={product.start_price}
+              product_Id={product.id}
+            />
+          ))
+      )}
+    </StyledContainer>
   );
 };
 

@@ -68,10 +68,9 @@ export default function App() {
               />
             </Link>
           </Navbar.Brand>
-
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            <StyledNav className="ml-auto">
+            <Nav className="ml-auto">
               <Nav.Link as={Link} to="/category" className="nav-link">
                 All categories
               </Nav.Link>
@@ -81,7 +80,7 @@ export default function App() {
               <Nav.Link as={Link} to="/contact" className="nav-link">
                 Contact us
               </Nav.Link>
-            </StyledNav>
+            </Nav>
           </Navbar.Collapse>
           <StyledNav className="ml-auto">
             <StyledButton

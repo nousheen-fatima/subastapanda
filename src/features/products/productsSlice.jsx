@@ -39,9 +39,23 @@ export const getDetailProduct = createAsyncThunk(
     }
   }
 );
+export const fetchFilteredProducts = createAsyncThunk(
+  "products/fetchFiltered",
+  async (filters, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${BASE_URL}/products`, {
+        params: filters,
+      });
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 
 const initialState = {
   products: [],
+  activeProducts: [],
   loading: false,
   productDetail: [],
   totalProducts: 0,
@@ -51,9 +65,11 @@ const initialState = {
   filteredProducts: [],
   sort: "price-lowest",
   filters: {
-    search: "",
+    keyword: "",
     category: "all",
-    price: 0,
+    priceRange: 0,
+    seller: "",
+    endDate: "",
   },
 };
 
@@ -62,11 +78,11 @@ const productsSlice = createSlice({
   initialState,
   reducers: {
     filterProducts: (state, action) => {
-      const { search, category, price } = action.payload;
+      const { keyword, category, price } = action.payload;
       let tempProducts = [...state.products];
-      if (search) {
+      if (keyword) {
         tempProducts = tempProducts.filter((product) =>
-          product.title.toLowerCase().includes(search.toLowerCase())
+          product.title.toLowerCase().includes(keyword.toLowerCase())
         );
       }
       if (category !== "all") {
@@ -100,11 +116,13 @@ const productsSlice = createSlice({
     setFilters: (state, action) => {
       state.filters = action.payload;
     },
-    clearFilter: (state) => {
-      state.filters = {
-        ...initialState.filters,
-        price: state.maxPrice,
-      };
+    loadMoreProducts: (state) => {
+      const activProductsLen = state.activeProducts.length;
+      const newProducts = state.products.slice(
+        activProductsLen,
+        activProductsLen + 2
+      );
+      state.activeProducts = [...state.activeProducts, ...newProducts];
     },
   },
   extraReducers: (builder) => {
@@ -156,7 +174,7 @@ export const {
   setSortingOption,
   sortProducts,
   setFilters,
-  clearFilter,
+  loadMoreProducts,
 } = productsSlice.actions;
 
 export default productsSlice.reducer;

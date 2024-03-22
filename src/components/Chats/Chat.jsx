@@ -8,7 +8,6 @@ const Main = styled.div`
   flex-direction: column;
   align-items: flex-start;
   gap: 20px;
-  width: 40%;
 `;
 const StyledImageIcon = styled(Image)`
   width: 80px;

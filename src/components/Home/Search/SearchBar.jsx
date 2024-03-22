@@ -11,7 +11,6 @@ const SearchBarContainer = styled.div`
   align-items: center;
   border-bottom-left-radius: 30px;
   border-bottom-right-radius: 30px;
-
   height: 80vh;
   color: white;
 `;

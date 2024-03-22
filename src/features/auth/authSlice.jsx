@@ -15,7 +15,9 @@ export const signupUser = createAsyncThunk(
       });
       return handleResponse(response);
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
+      return thunkAPI.rejectWithValue(
+        error.response ? error.response.data.message : error.message
+      );
     }
   }
 );
@@ -124,17 +126,18 @@ export const authSlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(signupUser.fulfilled, (state, { payload }) => {
-        state.isLoading = false;
-        state.isSuccess = true;
-      })
       .addCase(signupUser.pending, (state) => {
         state.isLoading = true;
+      })
+      .addCase(signupUser.fulfilled, (state, { payload }) => {
+        state.user = { user: payload.user, access_token: payload.access_token };
+        state.isLoading = false;
+        state.isSuccess = true;
       })
       .addCase(signupUser.rejected, (state, { payload }) => {
         state.isLoading = false;
         state.isError = true;
-        state.errorMessage = payload.message;
+        state.errorMessage = payload.message || "SignUp failed";
       })
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;
@@ -149,7 +152,6 @@ export const authSlice = createSlice({
         state.isError = true;
         state.errorMessage = payload.message || "Login failed";
       })
-
       .addCase(logout.pending, (state) => {
         state.isLoading = true;
       })

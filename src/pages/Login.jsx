@@ -113,14 +113,6 @@ const Login = () => {
     resolver: yupResolver(loginSchema),
   });
 
-  const onSubmit = async ({ user_name, password }) => {
-    try {
-      dispatch(loginUser({ user_name, password }));
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  };
-
   const handleLogin = ({ user_name, password }) => {
     dispatch(loginUser({ user_name, password }));
   };
@@ -153,7 +145,7 @@ const Login = () => {
       </StyledContentContainer>
       <StyledFormContainer>
         <StyledForm onSubmit={handleSubmit(handleLogin)}>
-          <h2>Login</h2>
+          <h4>Login</h4>
           <Form.Group>
             <StyledInput
               type="name"

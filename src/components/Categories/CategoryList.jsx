@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, Image, Row } from "react-bootstrap";
+import { Col, Container, Image, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 const Title = styled.h4`
@@ -23,7 +23,7 @@ const CategoryList = ({ categories }) => {
   const navigate = useNavigate();
 
   return (
-    <div>
+    <Container>
       <Row>
         {categories.map((category) => (
           <Col
@@ -43,7 +43,7 @@ const CategoryList = ({ categories }) => {
           </Col>
         ))}
       </Row>
-    </div>
+    </Container>
   );
 };
 

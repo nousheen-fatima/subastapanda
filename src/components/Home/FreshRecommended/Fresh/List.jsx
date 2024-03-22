@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import styled from "styled-components";
-import RecommendedItems from "./RecommendedItems";
+import ProductCard from "../../../Product/ProductCard";
 
 const StyledCarousel = styled(Carousel)`
   .react-multi-carousel-item {
@@ -14,7 +14,7 @@ const StyledCarousel = styled(Carousel)`
   }
 `;
 
-const RecommendedCarousel = () => {
+const RecommendedList = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -60,7 +60,7 @@ const RecommendedCarousel = () => {
       arrows={false}
     >
       {data.map((product) => (
-        <RecommendedItems
+        <ProductCard
           key={product.id}
           title={product.title}
           image_url={product.main_image_url}
@@ -72,4 +72,4 @@ const RecommendedCarousel = () => {
   );
 };
 
-export default RecommendedCarousel;
+export default RecommendedList;

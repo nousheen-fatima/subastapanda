@@ -1,12 +1,13 @@
 import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Dropdown, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import styled, { keyframes } from "styled-components";
 import { fetchCategories } from "../../features/categories/categoriesSlice";
+import { setFilters } from "../../features/products/productsSlice";
 import { fetchUsers } from "../../features/users/userSlice";
-import PriceRangeSlider from "./PriceRangeSlider";
+import PriceRangeInput from "./PriceRangeInput";
 
 const slideInRight = keyframes`
   from {
@@ -30,9 +31,7 @@ const StyledDropdownMenu = styled(Dropdown.Menu)`
 const StyledDropdownItem = styled(Dropdown.Item)`
   margin-bottom: 8px;
 `;
-const PriceRangeHeading = styled.h6`
-  font-weight: bold;
-`;
+
 const ButtonContainer = styled.div`
   display: flex;
   align-items: center;
@@ -44,12 +43,28 @@ const FilterButton = () => {
   const dispatch = useDispatch();
   const categories = useSelector((state) => state.categories.categories);
   const users = useSelector((state) => state.users.users);
+  const [keyword, setKeyword] = useState("");
+  const [category, setCategory] = useState("All Categories");
+  const [seller, setSeller] = useState("All Sellers");
+  const [endDate, setEndDate] = useState("");
+  const [priceRange, setPriceRange] = useState({ min: 0, max: 100 });
 
   useEffect(() => {
     dispatch(fetchCategories());
     dispatch(fetchUsers());
   }, [dispatch]);
 
+  const handleFilter = () => {
+    dispatch(setFilters({ keyword, category, seller, endDate, priceRange }));
+  };
+
+  const handleReset = () => {
+    setKeyword("");
+    setCategory("All Categories");
+    setSeller("All Sellers");
+    setEndDate("");
+    setPriceRange({ min: 0, max: 500 });
+  };
   return (
     <Dropdown autoClose="outside">
       <Dropdown.Toggle variant="outline-dark" id="dropdown-basic">
@@ -57,10 +72,18 @@ const FilterButton = () => {
       </Dropdown.Toggle>
       <StyledDropdownMenu variant="outline-dark">
         <StyledDropdownItem>
-          <Form.Control type="text" placeholder="Keyboard" />
+          <Form.Control
+            type="text"
+            placeholder="Keyboard"
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+          />
         </StyledDropdownItem>
         <StyledDropdownItem>
-          <Form.Select>
+          <Form.Select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          >
             <option>All Categories</option>
             {categories.map((category) => (
               <option key={category.id}>{category.title}</option>
@@ -68,7 +91,10 @@ const FilterButton = () => {
           </Form.Select>
         </StyledDropdownItem>
         <StyledDropdownItem>
-          <Form.Select>
+          <Form.Select
+            value={seller}
+            onChange={(e) => setSeller(e.target.value)}
+          >
             <option>All Sellers</option>
             {users.map((user) => (
               <option key={user.id}>{user.full_name}</option>
@@ -76,15 +102,26 @@ const FilterButton = () => {
           </Form.Select>
         </StyledDropdownItem>
         <StyledDropdownItem>
-          <Form.Control type="date" placeholder="Ending Date" />
+          <Form.Control
+            type="date"
+            placeholder="Ending Date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+          />
         </StyledDropdownItem>
         <StyledDropdownItem>
-          <PriceRangeHeading>Price Range</PriceRangeHeading>
-          <PriceRangeSlider min={0} max={100} />
+          <PriceRangeInput
+            value={priceRange}
+            onChange={(e) => setPriceRange(e.target.value)}
+          />
         </StyledDropdownItem>
         <ButtonContainer>
-          <StyledButton variant="outline-dark">Reset Filter</StyledButton>
-          <StyledButton variant="dark">Apply Filter</StyledButton>
+          <StyledButton variant="outline-dark" onClick={handleReset}>
+            Reset Filter
+          </StyledButton>
+          <StyledButton variant="dark" onClick={handleFilter}>
+            Apply Filter
+          </StyledButton>
         </ButtonContainer>
       </StyledDropdownMenu>
     </Dropdown>

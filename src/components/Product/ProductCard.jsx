@@ -3,7 +3,7 @@ import { Button, Card, Container, Image, Row } from "react-bootstrap";
 import toast from "react-hot-toast";
 import { LuAlarmClock } from "react-icons/lu";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { placeBid } from "../../features/bid/bidSlice";
 import BidInput from "../Ui/PlaceBid";
@@ -77,6 +77,7 @@ const RightParagraph = styled.p`
   display: flex;
   gap: 8px;
 `;
+
 const ProductCard = ({ title, image_url, price, product_Id }) => {
   const { user } = useSelector((state) => state.auth);
   const isloggedIn = user?.access_token;
@@ -85,6 +86,11 @@ const ProductCard = ({ title, image_url, price, product_Id }) => {
   const [bidValue, setBidValue] = useState("");
 
   const handlePlaceBid = async () => {
+    if (!bidValue) {
+      toast.error("Please enter a bid amount.");
+      return;
+    }
+
     try {
       await dispatch(
         placeBid({
@@ -99,6 +105,7 @@ const ProductCard = ({ title, image_url, price, product_Id }) => {
       toast.error("Error placing bid");
     }
   };
+
   return (
     <StyledContainer>
       <StyledCard onClick={() => navigate(`/products/${product_Id}`)}>
@@ -134,7 +141,9 @@ const ProductCard = ({ title, image_url, price, product_Id }) => {
             <span>10 silver</span>
           </Row>
           <RightWrapper>
-            <ButtonStyled variant="dark">Enter Bid</ButtonStyled>
+            <Link to="/login">
+              <ButtonStyled variant="dark">Enter Bid</ButtonStyled>
+            </Link>
             <RightParagraph>
               <LuAlarmClock size={"20"} />
               3h:25m

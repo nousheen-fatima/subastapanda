@@ -1,9 +1,12 @@
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
+import React, { useState } from "react";
 import { Button, Container, Row } from "react-bootstrap";
+import toast from "react-hot-toast";
 import { LuAlarmClock } from "react-icons/lu";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import { placeBid } from "../../../features/bid/bidSlice";
 import BidInput from "../../Ui/PlaceBid";
 
 const MainWrapper = styled.div`
@@ -78,6 +81,7 @@ const BoldParagraph = styled.p`
   font-weight: 600;
   color: #000;
 `;
+
 const Bid = styled.p`
   font-size: 2rem;
 `;
@@ -85,7 +89,7 @@ const Bid = styled.p`
 const RowWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 2px;
   width: 100%;
 `;
 
@@ -99,6 +103,7 @@ const RightWrapper = styled.div`
 const ButtonStyled = styled(Button)`
   padding: 10px 20px;
   border-radius: 10px;
+  margin-bottom: 45px;
   margin-right: -10px;
   margin-left: -4px;
   z-index: 1;
@@ -106,16 +111,45 @@ const ButtonStyled = styled(Button)`
 
 const RightParagraph = styled.p`
   display: flex;
-  flex-direction: row;
   justify-content: flex-end;
   font-size: 1rem;
   font-weight: 600;
   color: #333;
   display: flex;
-  gap: 8px;
+  gap: 4px;
 `;
 
 const AuctionContainer = () => {
+  const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const [bidValue, setBidValue] = useState("");
+
+  const handlePlaceBid = async () => {
+    if (!bidValue) {
+      toast.error("Please enter a bid amount.");
+      return;
+    }
+    try {
+      await dispatch(placeBid({ bidValue, accessToken: user?.access_token }));
+      toast.success("Bid placed successfully");
+    } catch (error) {
+      console.error("Error placing bid:", error);
+      toast.error("Error placing bid");
+    }
+  };
+
+  const renderBidInput = () => (
+    <>
+      <BidInput
+        value={bidValue}
+        onChange={(e) => setBidValue(e.target.value)}
+      />
+      <ButtonStyled variant="dark" onClick={handlePlaceBid}>
+        Place Bid
+      </ButtonStyled>
+    </>
+  );
+
   return (
     <MainWrapper>
       <StyledContainer>
@@ -137,11 +171,10 @@ const AuctionContainer = () => {
               <Count>$2200</Count>
             </Row>
             <RightWrapper>
-              <BidInput />
-              <ButtonStyled variant="dark">Enter Bid</ButtonStyled>
+              {user ? renderBidInput() : <BidInput />}
             </RightWrapper>
             <RightParagraph>
-              <LuAlarmClock size={"20"} />
+              <LuAlarmClock size={20} />
               3h:25m
             </RightParagraph>
           </RowWrapper>

@@ -4,9 +4,8 @@ import AppRouter from "./routes";
 
 const Container = styled.div`
   background: white;
-  width: 90%;
+  width: 100%;
   height: 100%;
-  margin-inline: auto;
 `;
 
 function App() {

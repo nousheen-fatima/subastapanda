@@ -78,6 +78,8 @@ const SearchResultList = styled(ListGroup)`
 `;
 
 const SearchResultItem = styled(ListGroup.Item)`
+  cursor: pointer;
+
   font-size: 20px;
   background-color: #2a2d30;
   color: white;
@@ -127,13 +129,6 @@ const InputSearch = () => {
     setData([]);
   };
 
-  // const filterData = (searchTerm) => {
-  //   const filteredData = data.filter((item) =>
-  //     item.title.toLowerCase().includes(searchTerm.toLowerCase())
-  //   );
-  //   setFilteredData(filteredData);
-  // };
-
   const handleKeyDown = (e) => {
     if (selectedItem < data.length) {
       if (e.key === "ArrowUp" && selectedItem > 0) {
@@ -148,12 +143,6 @@ const InputSearch = () => {
     }
   };
 
-  const handleItemClick = (selectedItem) => {
-    setSearchTerm(selectedItem.title);
-    setFilteredData([]);
-    setData([]);
-    setSelectedItem(-1);
-  };
   return (
     <Container
       style={{

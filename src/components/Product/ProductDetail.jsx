@@ -1,15 +1,22 @@
 import React from "react";
-import { Button, Col, Container, Image } from "react-bootstrap";
+import { Button, Col, Container, Image, Row } from "react-bootstrap";
 import { BsEye } from "react-icons/bs";
 import { LuAlarmClock } from "react-icons/lu";
 import styled from "styled-components";
 import Chat from "../Chats/Chat";
 
+const Main = styled(Row)`
+  display: flex;
+  gap: 10px;
+  margin-top: 60px;
+  margin-bottom: 60px;
+`;
+
 const MainHeading = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 80px;
+  margin-top: 60px;
 `;
 
 const Heading = styled.h2`
@@ -17,43 +24,39 @@ const Heading = styled.h2`
   font-weight: bold;
 `;
 
-const LeftColumn = styled.div`
-  width: 35%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-`;
-
 const DescHeading = styled.h5`
   font-weight: bold;
 `;
 
-const CenterColumn = styled.div`
+const CenterColumn = styled(Col)`
   position: relative;
 `;
 
-const ContentContainer = styled.div`
+const DescriptionContainer = styled(Col)`
   display: flex;
-  gap: 20px;
-  margin-top: 40px;
-  margin-bottom: 80px;
-  color: black;
-`;
-
-const ImageDescription = styled.div`
-  position: absolute;
-  top: 10px;
-  left: 20px;
-  right: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   gap: 10px;
   color: black;
 `;
 
+const ProfileImageContainer = styled.div`
+  position: absolute;
+  padding: 12px;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  display: flex;
+  background: linear-gradient(
+    to top,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(0, 0, 0, 0.8) 100%
+  );
+  gap: 10px;
+`;
+
 const ImageProfile = styled(Col)`
-  color: black;
+  color: #fff;
   display: flex;
   flex-direction: column;
   line-height: 1px;
@@ -63,44 +66,59 @@ const ProfileImage = styled(Image)`
   object-fit: cover;
   border-radius: 40px;
 `;
-const BottomImageDescription = styled.div`
+const ImageOverlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.8) 100%
+  );
+`;
+const BottomImageDescription = styled(Row)`
   position: absolute;
   bottom: 10px;
-  left: 20px;
+  gap: 8px;
+  color: #fff;
+`;
+const SContainer = styled(Row)`
+  color: #fff;
+`;
+const BidContainer = styled(Row)`
+  display: flex;
+  color: #fff;
+`;
+const RightBidContainer = styled(Col)`
   display: flex;
   flex-direction: column;
-  color: black;
+  align-items: flex-end;
+  gap: 4px;
 `;
-const SContainer = styled.div`
+const LeftBidContainer = styled(Col)``;
+const Viewer = styled.span`
   display: flex;
-  justify-content: space-between;
-  color: black;
+  gap: 4px;
+  background-color: #000;
+  color: white;
 `;
-const DContainer = styled.div`
+const BidTime = styled.span`
   display: flex;
-  gap: 250px;
+  gap: 4px;
 `;
-const RightContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  color: black;
-`;
-const LeftContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  color: black;
-`;
-const MainImage = styled(Image)`
-  object-fit: cover;
-`;
+
+const ChatContainer = styled(Col)``;
+
 const ProductDetail = ({ product }) => {
   return (
     <Container>
       <MainHeading>
         <Heading>Listing Details</Heading>
       </MainHeading>
-      <ContentContainer>
-        <LeftColumn>
+      <Main>
+        <DescriptionContainer>
           <DescHeading>Description</DescHeading>
           <p>{product.item_description}</p>
           <DescHeading>Shipping&Payment</DescHeading>
@@ -108,15 +126,17 @@ const ProductDetail = ({ product }) => {
           <p>{product.payment_option}</p>
           <DescHeading>Shipping Option</DescHeading>
           <p>{product.shipping_option}</p>
-        </LeftColumn>
+        </DescriptionContainer>
         <CenterColumn>
-          <MainImage
+          <Image
             src={product?.main_image?.image_path}
             alt="Product Image"
-            width="450px"
+            width="390px"
             height="800px"
+            style={{ objectFit: "cover" }}
           />
-          <ImageDescription>
+          <ImageOverlay />
+          <ProfileImageContainer>
             <ProfileImage
               src="https://www.slazzer.com/static/images/upload/sample-1.jpg"
               alt="user profile Image"
@@ -127,7 +147,7 @@ const ProductDetail = ({ product }) => {
               <h6>Noshi</h6>
               <span>⭐️ 4.8</span>
             </ImageProfile>
-            <span
+            <Viewer
               style={{
                 backgroundColor: "black",
                 padding: "8px",
@@ -136,39 +156,41 @@ const ProductDetail = ({ product }) => {
             >
               <BsEye size="25" />
               167
-            </span>
-          </ImageDescription>
+            </Viewer>
+          </ProfileImageContainer>
           <BottomImageDescription>
             <SContainer>
-              <RightContainer>
+              <LeftBidContainer>
                 <h6>{product.title}</h6>
                 <p>condition: {product.condition_description}</p>
-              </RightContainer>
-              <LeftContainer>
+              </LeftBidContainer>
+              <RightBidContainer>
                 <span>Current Price</span>
                 <span>${product.final_price}</span>
-              </LeftContainer>
+              </RightBidContainer>
             </SContainer>
             <p>{product.item_description}</p>
             <span>Category: {product?.category?.title}</span>
             <br />
-            <DContainer>
-              <RightContainer>
+            <BidContainer>
+              <LeftBidContainer>
                 <h6>Entry Fee</h6>
                 <p>10 silver</p>
-              </RightContainer>
-              <LeftContainer>
+              </LeftBidContainer>
+              <RightBidContainer>
                 <Button variant="dark">Enter Bid</Button>
-                <span>
+                <BidTime>
                   <LuAlarmClock size="20" style={{ marginBottom: "5px" }} />
                   3h:25m
-                </span>
-              </LeftContainer>
-            </DContainer>
+                </BidTime>
+              </RightBidContainer>
+            </BidContainer>
           </BottomImageDescription>
         </CenterColumn>
-        <Chat product={product} />
-      </ContentContainer>
+        <ChatContainer>
+          <Chat product={product} />
+        </ChatContainer>
+      </Main>
     </Container>
   );
 };

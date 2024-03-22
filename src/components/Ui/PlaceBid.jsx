@@ -4,7 +4,7 @@ import styled from "styled-components";
 const InputForm = styled(Form)`
   border-radius: 10px;
   display: flex;
-  align-items: center;
+  margin-bottom: 47px;
 `;
 
 const DollarInput = styled(Form.Control)`

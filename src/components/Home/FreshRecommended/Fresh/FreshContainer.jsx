@@ -3,8 +3,7 @@ import { Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import HeadingBar from "../../../Ui/HeadingBar";
-import RecommendedCarousel from "./RecommendedCarousel";
-
+import RecommendedList from "./List";
 const Wrapper = styled.div`
   width: 100%;
   min-height: 70vh;
@@ -21,7 +20,7 @@ const FreshContainer = () => {
           onClick={() => navigate("/products")}
         />
       </Container>
-      <RecommendedCarousel />
+      <RecommendedList />
     </Wrapper>
   );
 };
